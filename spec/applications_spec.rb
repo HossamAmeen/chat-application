@@ -14,15 +14,33 @@ RSpec.describe 'Applications API', type: :request do
   end
 
   describe 'POST /applications' do
-    let(:valid_attributes) { { name: 'New App' } }
-
+    let(:valid_attributes) { { application: { name: 'New App' } } }
+  
     context 'when the request is valid' do
       before { post '/applications', params: valid_attributes }
-
+  
       it 'creates a new application' do
         expect(response).to have_http_status(:created)
-        expect(JSON.parse(response.body)['name']).to eq('New App')
+        
+        # Extract token from response
+        response_body = json
+        token = response_body['token']
+  
+        # Check that token is present in the database
+        expect(token).not_to be_nil
+        expect(Application.find_by(token: token)).to be_present
+      end
+    end
+  
+    context 'when the request is invalid' do
+      let(:invalid_attributes) { { application: { name: '' } } }
+  
+      before { post '/applications', params: invalid_attributes }
+  
+      it 'returns an unprocessable entity status' do
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
+  
 end

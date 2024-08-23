@@ -15,6 +15,7 @@ RSpec.describe 'Chats API', type: :request do
   end
 
   describe 'POST /applications/:application_token/chats' do
+    let(:valid_attributes) {}
     context 'when the request is valid' do
       before do
         post "/applications/#{application.token}/chats", params: valid_attributes

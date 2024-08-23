@@ -16,15 +16,28 @@ RSpec.describe 'Messages API', type: :request do
   end
 
   describe 'POST /applications/:application_token/chats/:number/messages' do
-    let(:valid_attributes) { { body: 'New Message' } }
-
+    let(:application) { Application.create!(name: 'Test App', token: 'token123') }
+    let(:chat) { application.chats.create!(number: 1) }
+    let(:valid_attributes) { { message: { body: 'Hello, World!' } } }
+  
     context 'when the request is valid' do
       before { post "/applications/#{application.token}/chats/#{chat.number}/messages", params: valid_attributes }
-
+  
       it 'creates a new message' do
         expect(response).to have_http_status(:created)
-        expect(JSON.parse(response.body)['body']).to eq('New Message')
+        expect(json['body']).to eq('Hello, World!')
+        expect(Message.find_by(body: 'Hello, World!')).to be_present
       end
     end
-  end
+  
+    context 'when the request is invalid' do
+      let(:invalid_attributes) { { message: { body: '' } } }
+  
+      before { post "/applications/#{application.token}/chats/#{chat.number}/messages", params: invalid_attributes }
+  
+      it 'returns an unprocessable entity status' do
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+  end  
 end

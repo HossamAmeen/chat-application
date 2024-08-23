@@ -92,3 +92,7 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 =end
 end
+
+def json
+  JSON.parse(response.body)
+end

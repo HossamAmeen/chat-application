@@ -28,7 +28,9 @@ class Message < ApplicationRecord
   private
 
   def update_chat_messages_count
-    chat.increment!(:messages_count)
+    Chat.transaction do
+      chat.increment!(:messages_count)
+    end
   end
 
 
