@@ -31,6 +31,25 @@ class MessagesController < ApplicationController
     end
   end
 
+  def search
+    query = params[:q]
+    if query.present?
+      @messages = Message.search({
+        query: {
+          bool: {
+            must: [
+              { match: { body: query } },
+              { term: { chat_id: @chat.id } }
+            ]
+          }
+        }
+      }).records
+      render json: @messages
+    else
+      render json: { error: 'Query parameter is missing' }, status: :bad_request
+    end
+  end
+
   private
 
   def set_application

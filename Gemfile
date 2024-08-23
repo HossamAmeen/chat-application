@@ -12,6 +12,8 @@ gem 'mysql2', '~> 0.5'
 gem 'redis', '~> 5.0'
 gem 'elasticsearch-rails', '~> 7.1'
 gem 'elasticsearch-model', '~> 7.1'
+gem 'rspec-rails'
+
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"

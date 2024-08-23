@@ -1,0 +1,1 @@
+Elasticsearch::Model.client = Elasticsearch::Client.new(hosts: ['http://elasticsearch:9200'])
