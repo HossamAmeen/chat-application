@@ -1,6 +1,6 @@
 class MessagesController < ApplicationController
-  before_action :set_application
-  before_action :set_chat
+  before_action :set_application, only: [:index, :show, :create, :update]
+  before_action :set_chat, only: [:index, :show, :create, :update]
   before_action :set_message, only: [:show, :update]
 
   def index
@@ -13,14 +13,25 @@ class MessagesController < ApplicationController
   end
 
   def create
-    new_number = @chat.messages.count + 1
-    @message = @chat.messages.new(message_params.merge(number: new_number))
+    redis_key = "chat_#{params[:chat_number]}_messages_count"
+
+    # Check if the message count exists in Redis
+    messages_count = $redis.get(redis_key).to_i
+
+    if messages_count.zero?
+      $redis.set(redis_key, @chat.messages_count)
+    end
+
+    new_message_number = $redis.incr(redis_key)
+    @message = @chat.messages.new(message_params.merge(number: new_message_number))
 
     if @message.save
-      render json: @message, status: :created
+      render json: {number: new_message_number}, status: :accepted
     else
+      $redis.decr(redis_key)
       render json: @message.errors, status: :unprocessable_entity
-    end
+    end    
+
   end
 
   def update
