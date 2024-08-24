@@ -1,24 +1,28 @@
-# README
+# Chat System API
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is a Ruby on Rails API project for managing applications, chats, and messages. 
+It uses MySQL for data storage, Redis for message counts, and Elasticsearch for searching messages. The project is containerized using Docker Compose.
 
-Things you may want to cover:
+## Prerequisites
 
-* Ruby version
+Before you begin, ensure you have the following installed on your system:
 
-* System dependencies
+- [Docker](https://www.docker.com/get-started)
+- [Docker Compose](https://docs.docker.com/compose/install/)
 
-* Configuration
+## Getting Started
 
-* Database creation
+### 1. Clone the Repository
 
-* Database initialization
+```bash
+git clone https://github.com/your-username/chat-system-api.git
+cd chat-system-api
 
-* How to run the test suite
+### 2. Set Up the Database
 
-* Services (job queues, cache servers, search engines, etc.)
+```bash
+docker-compose run web bundle exec rails db:create
+docker-compose run web bundle exec rails db:migrate
 
-* Deployment instructions
-
-* ...
+### 3. start project
+docker-compose up --build -d
