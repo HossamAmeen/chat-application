@@ -1,6 +1,6 @@
 class MessagesController < ApplicationController
-  before_action :set_application, only: [:index, :show, :create, :update]
-  before_action :set_chat, only: [:index, :show, :create, :update]
+  before_action :set_application, only: [:index, :show, :update]
+  before_action :set_chat, only: [:index, :show, :update]
   before_action :set_message, only: [:show, :update]
 
   def index
@@ -19,18 +19,15 @@ class MessagesController < ApplicationController
     messages_count = $redis.get(redis_key).to_i
 
     if messages_count.zero?
+      @application = Application.find_by!(token: params[:application_token])
+      @chat = @application.chats.find_by!(number: params[:chat_number])
+      messages_count = @chat.messages_count
       $redis.set(redis_key, @chat.messages_count)
     end
 
-    new_message_number = $redis.incr(redis_key)
-    @message = @chat.messages.new(message_params.merge(number: new_message_number))
-
-    if @message.save
-      render json: {number: new_message_number}, status: :accepted
-    else
-      $redis.decr(redis_key)
-      render json: @message.errors, status: :unprocessable_entity
-    end    
+    CreateMessageJob.perform_later(params[:application_token], params[:chat_number], params[:body])
+    
+    render json: {number: messages_count + 1}, status: :accepted
 
   end
 
