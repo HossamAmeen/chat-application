@@ -13,6 +13,10 @@ class MessagesController < ApplicationController
   end
 
   def create
+    if params[:body].blank?
+      return render json: { errors: ["Body can't be blank"] }, status: :unprocessable_entity
+    end
+
     redis_key = "chat_#{params[:chat_number]}_messages_count"
 
     # Check if the message count exists in Redis
