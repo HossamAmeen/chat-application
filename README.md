@@ -34,4 +34,4 @@ docker-compose exec web bundle exec sidekiq
 docker-compose run web bundle exec rspec
 
 ## 5. postman collection
-Access the Postman collection for API testing [here]https://documenter.getpostman.com/view/34569865/2sAXjF8uMh.
+Access the Postman collection for API testing **[here](https://documenter.getpostman.com/view/34569865/2sAXjF8uMh)**.
