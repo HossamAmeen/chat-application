@@ -21,9 +21,9 @@ class Message < ApplicationRecord
   Message.__elasticsearch__.create_index!(force: true)
   Message.import
 
-  def as_json(options = {})
-    super(options.merge({ except: [:id, :chat_id] }))
-  end
+  # def as_json(options = {})
+  #   super(options.merge({ except: [:id, :chat_id] }))
+  # end
 
   private
 

@@ -18,20 +18,20 @@ Before you begin, ensure you have the following installed on your system:
 git clone https://github.com/your-username/chat-system-api.git
 cd chat-system-api
 
-### 2. Set Up the Database
+## 2. Set Up the Database
 
 ```bash
 docker-compose run web bundle exec rails db:create
 docker-compose run web bundle exec rails db:migrate
 
-### 3. start project
+## 3. start project
 docker-compose up --build -d
 
-### 4. run sidekiq
+## 4. run sidekiq
 docker-compose exec web bundle exec sidekiq
 
-### 4. run unit test
+## 4. run unit test
 docker-compose run web bundle exec rspec
 
-### 5. postman collection
-Access the Postman collection for API testing https://documenter.getpostman.com/view/34569865/2sAXjF8uMh.
+## 5. postman collection
+Access the Postman collection for API testing [here]https://documenter.getpostman.com/view/34569865/2sAXjF8uMh.
